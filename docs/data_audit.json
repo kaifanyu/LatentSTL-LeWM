@@ -1,0 +1,26 @@
+{
+  "complete": true,
+  "counts": {
+    "train": 256,
+    "transitions": 30720,
+    "val": 32,
+    "test": 32
+  },
+  "num_banks": 40,
+  "physical_coverage": {
+    "safe=True,reach=False": 147,
+    "safe=True,reach=True": 100,
+    "safe=False,reach=False": 31,
+    "safe=False,reach=True": 42
+  },
+  "representative_trajectories": {
+    "safe=True,reach=False": "000000",
+    "safe=True,reach=True": "000002",
+    "safe=False,reach=False": "000003",
+    "safe=False,reach=True": "000004"
+  },
+  "same_start_bank_rgb_identical": true,
+  "split_start_states_disjoint": true,
+  "raw_actions_within_bounds": true,
+  "videos_dir": "/data3/kaifany/LatentSTL-LeWM/runs/data_examples_v1"
+}
