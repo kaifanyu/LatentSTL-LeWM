@@ -75,6 +75,21 @@ All 22 tests passed, including real simulator integration. Full output:
 
 ## Main campaign and pending evidence
 
+Launched at 07:36 UTC on October 4, 2026:
+`runs/campaign_20261004T073606Z`. Source code at launch is local Git commit
+`c9d734f`; the campaign additionally preserves a source archive and data hash.
+
+| GPU | Seed | Supervisor PID | Training PID |
+|---:|---:|---:|---:|
+| 0 | 0 | 748507 | 748511 |
+| 1 | 1 | 748508 | 748512 |
+| 2 | 2 | 748509 | 748510 |
+
+These are detached processes and continue after the terminal/session ends.
+Use `python scripts/status.py` for current progress, since the table records
+launch PIDs rather than a live status. Logs and results are in the corresponding
+`seed_0`, `seed_1`, and `seed_2` directories.
+
 The launch budget is 20,000 steps or 100 epochs per seed, whichever occurs first.
 Full validation runs every 500 steps; `best.pt` minimizes validation total loss.
 Checkpoints/logs/configs/source snapshots are kept in the timestamped campaign.

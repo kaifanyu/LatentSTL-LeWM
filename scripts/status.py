@@ -28,18 +28,18 @@ def main():
     print(run.resolve())
     for path in sorted(run.glob('seed_*/status.json')):
         status = json.loads(path.read_text())
-        status['supervisor_alive'] = alive(status.get('supervisor_pid'))
-        status['child_alive'] = alive(status.get('child_pid'))
-        print(json.dumps(status, sort_keys=True))
-        for name in ['train/metrics.jsonl', 'train/train.jsonl', 'training.log']:
-            log = path.parent/name
-            if log.exists():
-                # Seek from the tail, rather than reading a long training log.
-                with log.open('rb') as handle:
-                    handle.seek(max(0, log.stat().st_size-8192))
-                    lines=handle.read().decode(errors='replace').splitlines()
-                print('\n'.join(lines[-2:]))
-                break
+        train_path=path.parent/'train/status.json'
+        train=json.loads(train_path.read_text()) if train_path.exists() else {}
+        summary={key:status.get(key) for key in
+                 ['seed','physical_gpu','phase','supervisor_pid','child_pid']}
+        summary.update(supervisor_alive=alive(status.get('supervisor_pid')),
+                       child_alive=alive(status.get('child_pid')),
+                       step=train.get('global_step'), updates=train.get('optimizer_updates'),
+                       loss=train.get('loss',train.get('val_loss')),
+                       elapsed_seconds=train.get('elapsed_seconds'))
+        if 'mpc_gate' in status:
+            summary['mpc_ready']=status['mpc_gate']['ready']
+        print(json.dumps(summary, sort_keys=True))
 
 
 if __name__ == '__main__':

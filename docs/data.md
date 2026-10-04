@@ -117,3 +117,11 @@ banks, split isolation, and actual physical class coverage. It exports one video
 for each observed safety/reach class. The initial `data/smoke_v1` collection
 predated the complete-state restore fix and is for schema/training plumbing only;
 it must not be used as scientific candidate-ranking evidence.
+
+The completed production collection contains 256 training, 32 validation, and
+32 test trajectories in 40 independent banks. Its 30,720 transitions took
+462 seconds to collect. The final audit passed: all same-bank initial images are
+identical, start states do not cross splits, and all executed actions satisfy the
+recorded bounds. Physical coverage is 147 safe/no-reach, 100 safe/reach,
+31 unsafe/no-reach, and 42 unsafe/reach trajectories. Representative videos are in
+`runs/data_examples_v1`; the machine-readable audit is `docs/data_audit.json`.
