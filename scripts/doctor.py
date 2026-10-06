@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path)
+    parser.add_argument('--expected-gpus', type=int, default=None,
+                        help='Optionally require this many visible GPUs; default accepts one or more.')
     args = parser.parse_args()
     report = {'python': platform.python_version(), 'cuda_runtime': torch.version.cuda,
               'packages': {n: importlib.metadata.version(n) for n in
@@ -23,8 +25,11 @@ def main():
         report['sources'][name] = {
             'commit': subprocess.check_output(['git','-C',str(path),'rev-parse','HEAD'], text=True).strip(),
             'diff': subprocess.check_output(['git','-C',str(path),'diff','--stat'], text=True).strip()}
-    if torch.cuda.device_count() != 3:
-        raise RuntimeError(f'Expected 3 visible GPUs, found {torch.cuda.device_count()}')
+    count = torch.cuda.device_count()
+    if count < 1:
+        raise RuntimeError('No CUDA GPU is visible; simulation/training needs an NVIDIA GPU.')
+    if args.expected_gpus is not None and count != args.expected_gpus:
+        raise RuntimeError(f'Expected {args.expected_gpus} visible GPUs, found {count}')
     for gpu in range(torch.cuda.device_count()):
         with torch.cuda.device(gpu):
             x = torch.randn(512,512,device=f'cuda:{gpu}')

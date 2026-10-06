@@ -2,7 +2,11 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-uv venv --python 3.11 .venv
+command -v uv >/dev/null || { echo 'Install uv before running setup.sh.' >&2; exit 1; }
+if [[ ! -x .venv/bin/python ]]; then
+  uv venv --python 3.11 .venv
+fi
+.venv/bin/python -c 'import sys; assert sys.version_info[:2] == (3, 11), "Expected Python 3.11 in .venv"'
 uv pip install --python .venv/bin/python -r requirements.lock.txt
 mkdir -p third_party datasets .cache/libero
 if [[ ! -d third_party/le-worldmodel/.git ]]; then

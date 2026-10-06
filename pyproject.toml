@@ -5,8 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "latent-stl-lewm"
 version = "0.1.0"
-description = "Isolated LIBERO LeWorldModel latent STL experiments"
+description = "Signal Temporal Logic over images and LeWorldModel latents in LIBERO"
+readme = "README.md"
 requires-python = ">=3.11,<3.12"
+
+[project.urls]
+Repository = "https://github.com/kaifanyu/LatentSTL-LeWM"
 
 [tool.setuptools.packages.find]
 include = ["latent_stl_lewm*"]

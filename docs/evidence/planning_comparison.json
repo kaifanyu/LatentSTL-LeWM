@@ -1,0 +1,287 @@
+{
+  "campaign": "latent_stl_research_20261005T075000Z",
+  "physical_criteria": {
+    "goal_error_m": 0.03,
+    "max_mug_displacement_m": 0.002,
+    "max_mug_rotation_deg": 2.0,
+    "definition": "Reach at least once while preserving mug throughout fixed budget"
+  },
+  "final_comparison": [
+    {
+      "method": "final_goal",
+      "scenario": "baseline",
+      "trials": 5,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 4,
+      "latent_positive": 2,
+      "mean_final_error_cm": 31.08605682849884
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "baseline",
+      "trials": 10,
+      "safe_reaches": 9,
+      "safe_finish": 8,
+      "safe_hold_last_10_steps": 8,
+      "mug_preserved": 10,
+      "latent_positive": 6,
+      "mean_final_error_cm": 1.861996972002089
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "camera_x_plus2cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 2,
+      "safe_hold_last_10_steps": 2,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 2.571296071012815
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "dim_085",
+      "trials": 3,
+      "safe_reaches": 1,
+      "safe_finish": 1,
+      "safe_hold_last_10_steps": 1,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 32.9769400258859
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "mug_x_minus3cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 2,
+      "safe_hold_last_10_steps": 2,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 2.475642009327809
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "mug_x_plus3cm",
+      "trials": 3,
+      "safe_reaches": 3,
+      "safe_finish": 3,
+      "safe_hold_last_10_steps": 3,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 1.108606718480587
+    },
+    {
+      "method": "visual_prior",
+      "scenario": "start_jitter_3cm",
+      "trials": 3,
+      "safe_reaches": 1,
+      "safe_finish": 1,
+      "safe_hold_last_10_steps": 1,
+      "mug_preserved": 3,
+      "latent_positive": 2,
+      "mean_final_error_cm": 6.23587854206562
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "baseline",
+      "trials": 10,
+      "safe_reaches": 9,
+      "safe_finish": 7,
+      "safe_hold_last_10_steps": 7,
+      "mug_preserved": 10,
+      "latent_positive": 7,
+      "mean_final_error_cm": 3.2751329336315393
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "camera_x_plus2cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 14.250466724236807
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "dim_085",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 30.159282684326172
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "mug_x_minus3cm",
+      "trials": 3,
+      "safe_reaches": 3,
+      "safe_finish": 1,
+      "safe_hold_last_10_steps": 1,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 2.9846660792827606
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "mug_x_plus3cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 1,
+      "safe_hold_last_10_steps": 1,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 3.738802236815294
+    },
+    {
+      "method": "waypoint_goal",
+      "scenario": "start_jitter_3cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 1,
+      "mean_final_error_cm": 5.007038141290347
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "baseline",
+      "trials": 10,
+      "safe_reaches": 9,
+      "safe_finish": 7,
+      "safe_hold_last_10_steps": 7,
+      "mug_preserved": 10,
+      "latent_positive": 7,
+      "mean_final_error_cm": 3.2751329336315393
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "camera_x_plus2cm",
+      "trials": 3,
+      "safe_reaches": 1,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 17.850777382651966
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "dim_085",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 30.159282684326172
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "mug_x_minus3cm",
+      "trials": 3,
+      "safe_reaches": 3,
+      "safe_finish": 2,
+      "safe_hold_last_10_steps": 2,
+      "mug_preserved": 3,
+      "latent_positive": 1,
+      "mean_final_error_cm": 2.2102088667452335
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "mug_x_plus3cm",
+      "trials": 3,
+      "safe_reaches": 1,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 4.595976943771045
+    },
+    {
+      "method": "waypoint_safe",
+      "scenario": "start_jitter_3cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 2,
+      "mean_final_error_cm": 5.136881644527118
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "baseline",
+      "trials": 10,
+      "safe_reaches": 8,
+      "safe_finish": 6,
+      "safe_hold_last_10_steps": 6,
+      "mug_preserved": 10,
+      "latent_positive": 7,
+      "mean_final_error_cm": 3.6314007081091404
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "camera_x_plus2cm",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 36.5342249472936
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "dim_085",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 1,
+      "mean_final_error_cm": 30.272483328978222
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "mug_x_minus3cm",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 39.065390825271606
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "mug_x_plus3cm",
+      "trials": 3,
+      "safe_reaches": 0,
+      "safe_finish": 0,
+      "safe_hold_last_10_steps": 0,
+      "mug_preserved": 3,
+      "latent_positive": 0,
+      "mean_final_error_cm": 35.459273060162865
+    },
+    {
+      "method": "waypoint_safe_original_refs",
+      "scenario": "start_jitter_3cm",
+      "trials": 3,
+      "safe_reaches": 2,
+      "safe_finish": 1,
+      "safe_hold_last_10_steps": 1,
+      "mug_preserved": 3,
+      "latent_positive": 2,
+      "mean_final_error_cm": 4.623062225679557
+    }
+  ],
+  "interpretation": "Successful waypoint control is demonstration-assisted; development trials excluded"
+}

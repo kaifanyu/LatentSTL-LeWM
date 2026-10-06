@@ -11,6 +11,5 @@
   "comparison": "numpy.testing.assert_array_equal, bitwise equality",
   "snapshot_format": "mujoco.mjtState.mjSTATE_INTEGRATION plus controller/gripper/observable reset",
   "simulator_source_sha256": "5b0512e10afe3bb36b54025f403b060849fecb7d34d75158f5022dc829a38609",
-  "test_log": "docs/data_test_results.txt",
   "command": "source scripts/env.sh; RUN_SIMULATOR_TESTS=1 .venv/bin/python -m pytest tests/test_data.py -q"
 }

@@ -1,9 +1,8 @@
 # LIBERO mug preservation data
 
-This experiment uses the established living-room mug obstacle scene copied from
-`LatentSTL/experiments/libero/mug_obstacle_table_move_arm.bddl` into the new
-project. The existing repository and evidence directories are read-only. LIBERO
-itself is installed from the isolated `third_party/LIBERO` checkout.
+This experiment uses the mug obstacle scene in
+`latent_stl_lewm/assets/mug_obstacle_table_move_arm.bddl`. LIBERO is installed
+from the pinned `third_party/LIBERO` checkout by `scripts/setup.sh`.
 
 The Panda arm starts near `[-0.05, 0.22, 0.54]` metres and the diagnostic reach
 target is `[-0.05, -0.22, 0.54]`. A red coffee mug occupies the straight path.
@@ -38,8 +37,8 @@ source scripts/env.sh
   --steps 96 --seed 20261004 --render-gpu 2
 ```
 
-This collects 30,720 transitions. The initial smoke measured roughly 70 simulated
-control steps per wall-clock second; the full collection takes about 8 minutes.
+This collects 30,720 transitions. The original collection took about 8 minutes
+on the research machine; runtime depends on rendering and hardware.
 An existing output directory is refused. The HDF5 file is named
 `trajectories.partial.h5` while collecting and atomically renamed to
 `trajectories.h5` after completion. The training loader rejects files without the
@@ -109,14 +108,13 @@ source scripts/env.sh
 RUN_SIMULATOR_TESTS=1 .venv/bin/python -m pytest tests/test_data.py -q
 .venv/bin/python -m latent_stl_lewm.dataset \
   datasets/libero_mug_v1/trajectories.h5 \
-  --output docs/data_audit.json --videos-dir runs/data_examples_v1
+  --output runs/new_data_audit.json --videos-dir runs/new_data_examples
 ```
 
 The audit checks alignment, raw action bounds, exact initial image equality within
 banks, split isolation, and actual physical class coverage. It exports one video
-for each observed safety/reach class. The initial `data/smoke_v1` collection
-predated the complete-state restore fix and is for schema/training plumbing only;
-it must not be used as scientific candidate-ranking evidence.
+for each observed safety/reach class. Obsolete pre-fix smoke data has been
+removed; use the completed production dataset for scientific comparisons.
 
 The completed production collection contains 256 training, 32 validation, and
 32 test trajectories in 40 independent banks. Its 30,720 transitions took
@@ -124,4 +122,5 @@ The completed production collection contains 256 training, 32 validation, and
 identical, start states do not cross splits, and all executed actions satisfy the
 recorded bounds. Physical coverage is 147 safe/no-reach, 100 safe/reach,
 31 unsafe/no-reach, and 42 unsafe/reach trajectories. Representative videos are in
-`runs/data_examples_v1`; the machine-readable audit is `docs/data_audit.json`.
+`runs/data_examples_v1`; the machine-readable audit is
+[evidence/data_audit.json](evidence/data_audit.json).

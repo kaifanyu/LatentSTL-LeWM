@@ -1,0 +1,82 @@
+{
+  "model": {
+    "action_dim": 7,
+    "image_size": 128,
+    "patch_size": 16,
+    "history_size": 3,
+    "hidden_dim": 192,
+    "embed_dim": 192,
+    "encoder_depth": 12,
+    "encoder_heads": 3,
+    "encoder_mlp_dim": 768,
+    "predictor_depth": 6,
+    "predictor_heads": 16,
+    "predictor_dim_head": 64,
+    "predictor_mlp_dim": 2048,
+    "projector_hidden_dim": 2048,
+    "dropout": 0.1,
+    "sigreg_weight": 0.09,
+    "sigreg_knots": 17,
+    "sigreg_num_proj": 1024,
+    "backend": "lewm"
+  },
+  "precision": "fp16",
+  "data": "Removed plumbing fixture; memory verification only",
+  "device": "cuda",
+  "results": [
+    {
+      "batch_size": 32,
+      "status": "ok",
+      "steps": 5,
+      "seconds_per_step": 0.16049502566456794,
+      "peak_allocated_gib": 1.0854511260986328,
+      "peak_reserved_gib": 1.2265625,
+      "optimizer_updates": 5,
+      "last": {
+        "loss": 1.0323833227157593,
+        "pred_loss": 0.14777395129203796,
+        "sigreg_loss": 9.82899284362793,
+        "latent_std": 0.29592907428741455,
+        "grad_norm": 5.18628454208374,
+        "optimizer_update": true,
+        "amp_scale": 1024.0
+      }
+    },
+    {
+      "batch_size": 64,
+      "status": "ok",
+      "steps": 5,
+      "seconds_per_step": 0.10682611986994743,
+      "peak_allocated_gib": 1.9151020050048828,
+      "peak_reserved_gib": 2.126953125,
+      "optimizer_updates": 5,
+      "last": {
+        "loss": 1.882061243057251,
+        "pred_loss": 0.1952992081642151,
+        "sigreg_loss": 18.741798400878906,
+        "latent_std": 0.34450098872184753,
+        "grad_norm": 13.405847549438477,
+        "optimizer_update": true,
+        "amp_scale": 1024.0
+      }
+    },
+    {
+      "batch_size": 128,
+      "status": "ok",
+      "steps": 5,
+      "seconds_per_step": 0.11537997610867023,
+      "peak_allocated_gib": 3.5675735473632812,
+      "peak_reserved_gib": 3.935546875,
+      "optimizer_updates": 5,
+      "last": {
+        "loss": 2.4755759239196777,
+        "pred_loss": 0.3737044632434845,
+        "sigreg_loss": 23.3541259765625,
+        "latent_std": 0.5335804224014282,
+        "grad_norm": 6.714387893676758,
+        "optimizer_update": true,
+        "amp_scale": 1024.0
+      }
+    }
+  ]
+}

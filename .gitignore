@@ -8,3 +8,22 @@ datasets/
 data/
 runs/
 third_party/
+
+# Local artifacts and credentials stay off GitHub.
+checkpoints/
+artifacts/
+build/
+dist/
+.env
+.env.*
+!.env.example
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.h5
+*.hdf5
+*.npz
+*.mp4
+*.log
+.DS_Store

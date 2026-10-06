@@ -1,0 +1,367 @@
+{
+  "campaign": "visual_stl_benchmark_20261006T071302Z",
+  "checkpoint_sha256": "018a4d94dd69c80bb235b5e94b6a115a8595cbb4621d6ef6c91c174430f78ec9",
+  "dataset_sha256": "a59e65b2f130e23acb06da40ab19fcf7a1c54cf15896f67f627c95a8c39ccc35",
+  "trajectories": 864,
+  "aggregates": [
+    {
+      "method": "global",
+      "operating_point": "balanced",
+      "episodes": 864,
+      "frame_false_safe": 0.5405532114392874,
+      "frame_false_unsafe": 0.3366419206212488,
+      "stl_agreement": 0.5659722222222222,
+      "missed_violations": 37,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 87,
+          "unsafe": 9,
+          "safe_hold": 87
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 75,
+          "unsafe": 21,
+          "safe_hold": 75
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 69,
+          "unsafe": 27,
+          "safe_hold": 69
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 34,
+          "unsafe": 30,
+          "safe_hold": 32
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 36,
+          "unsafe": 28,
+          "safe_hold": 34
+        }
+      }
+    },
+    {
+      "method": "global",
+      "operating_point": "false_safe_05",
+      "episodes": 864,
+      "frame_false_safe": 0.15827473042662915,
+      "frame_false_unsafe": 0.5818191761344216,
+      "stl_agreement": 0.5428240740740741,
+      "missed_violations": 11,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 87,
+          "unsafe": 9,
+          "safe_hold": 87
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 75,
+          "unsafe": 21,
+          "safe_hold": 75
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 63,
+          "unsafe": 32,
+          "safe_hold": 63
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 7,
+          "unsafe": 11,
+          "safe_hold": 7
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 10,
+          "unsafe": 8,
+          "safe_hold": 10
+        }
+      }
+    },
+    {
+      "method": "spatial",
+      "operating_point": "balanced",
+      "episodes": 864,
+      "frame_false_safe": 0.16783872480075013,
+      "frame_false_unsafe": 0.04652529975527392,
+      "stl_agreement": 0.9097222222222222,
+      "missed_violations": 5,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    },
+    {
+      "method": "spatial",
+      "operating_point": "false_safe_05",
+      "episodes": 864,
+      "frame_false_safe": 0.25850914205344583,
+      "frame_false_unsafe": 0.04089249825683934,
+      "stl_agreement": 0.9189814814814815,
+      "missed_violations": 7,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    },
+    {
+      "method": "pixels",
+      "operating_point": "balanced",
+      "episodes": 864,
+      "frame_false_safe": 0.07032348804500703,
+      "frame_false_unsafe": 0.041261638160862965,
+      "stl_agreement": 0.9340277777777778,
+      "missed_violations": 0,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    },
+    {
+      "method": "pixels",
+      "operating_point": "false_safe_05",
+      "episodes": 864,
+      "frame_false_safe": 0.16296296296296298,
+      "frame_false_unsafe": 0.032005796863678,
+      "stl_agreement": 0.9328703703703703,
+      "missed_violations": 9,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    },
+    {
+      "method": "red_pixels",
+      "operating_point": "balanced",
+      "episodes": 864,
+      "frame_false_safe": 0.05025785278949836,
+      "frame_false_unsafe": 0.021505817371450447,
+      "stl_agreement": 0.9328703703703703,
+      "missed_violations": 3,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    },
+    {
+      "method": "red_pixels",
+      "operating_point": "false_safe_05",
+      "episodes": 864,
+      "frame_false_safe": 0.14814814814814814,
+      "frame_false_unsafe": 0.004238272972123101,
+      "stl_agreement": 0.9571759259259259,
+      "missed_violations": 10,
+      "unsafe_episodes": 178,
+      "ranking": {
+        "terminal": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "reach_max": {
+          "banks": 96,
+          "safe_reach": 95,
+          "unsafe": 1,
+          "safe_hold": 95
+        },
+        "weighted_penalty": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "stl": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        },
+        "reach_and_hold": {
+          "banks": 96,
+          "safe_reach": 96,
+          "unsafe": 0,
+          "safe_hold": 96
+        }
+      }
+    }
+  ],
+  "interpretation": "Observed trajectory classification and offline candidate ranking, not CEM success rates",
+  "scenarios": [
+    "baseline",
+    "start_jitter_3cm",
+    "start_x_plus3cm",
+    "mug_x_plus3cm",
+    "mug_x_minus3cm",
+    "mug_y_plus3cm",
+    "camera_x_plus2cm",
+    "dim_085"
+  ],
+  "seed_waves": [
+    {
+      "name": "wave1",
+      "seed": 921000,
+      "banks": 4
+    },
+    {
+      "name": "wave2",
+      "seed": 922000,
+      "banks": 8
+    }
+  ]
+}

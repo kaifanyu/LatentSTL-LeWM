@@ -1,8 +1,9 @@
 # LeWM latent-STL experiment design
 
-This is a separate experiment workspace. The existing `/data3/kaifany/LatentSTL`
-and `/data3/kaifany/ImageWAM` source and evidence directories are read-only inputs
-to setup, and are never experiment output locations.
+This repository is self-contained apart from the pinned upstream dependencies
+installed by `scripts/setup.sh`. Experiments write to new local output
+directories. [workflow.md](workflow.md) describes the current entry points;
+[results.md](results.md) distinguishes monitoring, prediction, and control.
 
 The implementation follows the [LeWorldModel repository](https://github.com/linzhongzi/le-worldmodel)
 at `ca231f9f9d9ab041034b6d05e90b6e04bd6cff82` and its

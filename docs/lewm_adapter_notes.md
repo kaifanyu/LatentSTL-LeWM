@@ -8,8 +8,8 @@ directly, avoiding the upstream Lightning/data-framework dependency stack.
 The backbone factory was checked against the primary source
 [`stable_pretraining/backbone/utils.py`](https://github.com/galilai-group/stable-pretraining/blob/ab836bf699a2be712dfcf980a5eb70d36391e876/stable_pretraining/backbone/utils.py):
 192 hidden units, 12 layers, 3 attention heads, 768 intermediate units, default
-Hugging Face initialization, and no pooler. A source snapshot is saved beside
-this note. The default adapter contains **18,032,144 parameters**; this is the
+Hugging Face initialization, and no pooler. The source is linked above rather than
+vendored. The default adapter contains **18,032,144 parameters**; this is the
 measured count of this configuration, not the paper's approximate headline count.
 
 Deliberate adaptations for LIBERO/RTX 2080 Ti:
@@ -60,8 +60,6 @@ Verification on October 4, 2026:
   A checkpoint after update 30 was reloaded with optimizer/scaler/RNG/sampler
   states and continued through update 40. The final checkpoint also loaded on CPU.
 
-The interim `data/smoke_v1` dataset is exclusively a plumbing/memory fixture: it
-predates the collector's exact replay-state repair and must not support scientific
-ranking or planning claims. Production data is `datasets/libero_mug_v1`.
-Benchmark details are in `runs/benchmark_20261004_01/benchmark.json`; smoke logs
-and checkpoints are in `runs/training_smoke_20261004_01`.
+The obsolete plumbing fixtures and smoke checkpoints have been removed.
+Production data is `datasets/libero_mug_v1`. Historical memory measurements are
+preserved in [evidence/memory_benchmark.json](evidence/memory_benchmark.json).

@@ -22,5 +22,5 @@
   "same_start_bank_rgb_identical": true,
   "split_start_states_disjoint": true,
   "raw_actions_within_bounds": true,
-  "videos_dir": "/data3/kaifany/LatentSTL-LeWM/runs/data_examples_v1"
+  "videos_dir": "runs/data_examples_v1"
 }

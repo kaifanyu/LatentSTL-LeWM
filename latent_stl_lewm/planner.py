@@ -18,7 +18,7 @@ class CEMConfig:
 
 
 @torch.no_grad()
-def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl", config=None, predicate_config=None, history_latents=None):
+def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl", config=None, predicate_config=None, history_latents=None, initial_mean=None):
     config = config or CEMConfig()
     predicate_config = predicate_config or PredicateConfig()
     if objective not in ("terminal", "eventual", "stl"):
@@ -45,6 +45,11 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
         raise ValueError("Action bounds must be matching A-vectors with low <= high (equal bounds fix an action coordinate)")
     generator = torch.Generator(device=device).manual_seed(config.seed)
     mean = ((low + high) / 2).expand(config.horizon, -1).clone()
+    if initial_mean is not None:
+        initial_mean = torch.as_tensor(initial_mean, device=device, dtype=torch.float32)
+        if initial_mean.shape != mean.shape or not torch.isfinite(initial_mean).all():
+            raise ValueError("Warm-start mean must be finite and match horizon/action dimensions")
+        mean = initial_mean.clamp(low, high).clone()
     std = ((high - low) / 2).expand_as(mean).clone()
     best_score = -float("inf")
     best_actions = None
@@ -52,6 +57,9 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
     for iteration in range(config.iterations):
         noise = torch.randn(config.population, *mean.shape, generator=generator, device=device)
         actions = (mean[None] + std[None] * noise).clamp(low, high)
+        if initial_mean is not None:
+            # Keep the shifted previous solution among the genuinely sampled candidates.
+            actions[0] = mean
         values = []
         for chunk in actions.split(config.chunk_size):
             initial = z0.expand(chunk.shape[0], *z0.shape[1:])
@@ -69,6 +77,8 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
             best_score = elite_scores[0].item()
             best_actions = actions[indices[0]].clone()
         progress.append({"iteration": iteration, "best_score": elite_scores[0].item(), "mean_score": scores.mean().item(),
+                         "score_std": scores.std(unbiased=False).item(),
+                         "unique_scores": int(torch.unique(scores).numel()),
                          "candidate_actions": actions.cpu().tolist(), "candidate_scores": scores.cpu().tolist()})
     latent = model.rollout(z0, best_actions[None])
     scores = score_trajectories(with_history(latent), goal, safe, predicate_config)
