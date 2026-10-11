@@ -74,11 +74,24 @@ def observability_probe(env, snapshot, directory):
 
 
 def run(args):
-    out = Path(args.output); out.mkdir(parents=True, exist_ok=False)
+    # EGL uses its own device index; CUDA_VISIBLE_DEVICES alone does not route
+    # the renderer to the GPU assigned to this collection worker.
+    args.render_gpu = getattr(args, "render_gpu", 0)
+    if args.render_gpu < 0:
+        raise ValueError("render_gpu must be a nonnegative EGL device index")
+    if args.banks < 1:
+        raise ValueError("banks must be positive")
+    if args.steps < 2:
+        raise ValueError("steps must be at least 2 for the reach_leave behavior")
+    if not 0 <= args.seed <= args.seed + args.banks - 1 < 2**32:
+        raise ValueError("Every scene seed must fit an unsigned 32-bit integer")
     with h5py.File(args.source, "r") as old:
+        if not old.attrs.get("complete", False):
+            raise ValueError("Source dataset is incomplete")
         cfg = json.loads(old.attrs["metadata_json"])["simulator_config"]
         reference_goal = old["references/goal_rgb"][:]
-    cfg["render_gpu"] = 0
+    cfg["render_gpu"] = args.render_gpu
+    out = Path(args.output); out.mkdir(parents=True, exist_ok=False)
     env = ScenarioEnv(cfg, args.scenario)
     began = time.monotonic()
     rows = []
@@ -168,4 +181,6 @@ if __name__ == "__main__":
     p.add_argument("--seed", type=int, required=True)
     p.add_argument("--banks", type=int, default=4)
     p.add_argument("--steps", type=int, default=96)
+    p.add_argument("--render-gpu", type=int, default=0,
+                   help="EGL device index visible to the container, independent of CUDA_VISIBLE_DEVICES")
     run(p.parse_args())
