@@ -5,6 +5,53 @@ spatial LeWM predicate traces. It also evaluates a separate physical diagnostic
 oracle. This is recorded-trajectory monitoring; it does not train a model, run a
 robot, or establish that a latent dynamics predictor forecasts these predicates.
 
+## Docker and suite interoperability
+
+After [Docker setup](docker.md), run this checker as a separate command. The
+[two-GPU suite](stl_suite.md) retains its existing finite-episode benchmark and
+local-window forecast protocol; it does not invoke these seconds-based monitors.
+Both workflows use the same installed LeWM/LIBERO sources. Checkpoints are local
+files, not model-hub downloads; choose a completed model from the mounted `runs`
+directory.
+
+For example, after the suite's source collection and seed-0 fine-tuning finish,
+check its source dataset with the trained model:
+
+```bash
+bash scripts/docker.sh exec python -m latent_stl_lewm.check_stl \
+  --dataset /workspace/runs/stl_suite_v1/dataset/trajectories.h5 \
+  --checkpoint /workspace/runs/stl_suite_v1/models/seed_0/finetune/best.pt \
+  --methods pixels red_pixels global spatial --device cuda \
+  --formula /workspace/examples/stl_reach_preserve_5s.json \
+  --output /workspace/runs/timed_check_seed0
+```
+
+Replace `stl_suite_v1` with the actual suite directory and use a new output
+directory. This command calibrates on that source dataset's validation split and
+evaluates its test split. Its 96-action recordings cover 4.8 seconds, so a
+five-second formula can remain pending. Use an output under `/workspace/runs`
+for host persistence; `/tmp` examples later in this guide are disposable and
+disappear when the container is recreated. Historical checkpoint paths in those
+examples refer to retained local artifacts and are absent from a fresh checkout.
+
+The canonical CLI requires a complete HDF5 dataset with top-level
+`control_freq_hz`, per-episode integer `control_step` indices aligned with RGB,
+an explicit goal image, and diagnostic labels for its separate calibration and
+oracle comparison. Fresh calibration needs both validation and test episodes.
+Reusing its `calibration.json` requires the exact same dataset hash and matching
+checkpoint/predicate definitions. The forecast CLI uses that same artifact.
+
+The suite's fresh stress-test shards contain **test episodes only**, and its
+per-method benchmark calibration JSON has a different schema. Those files are
+not direct substitutes for this CLI's source dataset/calibration pair. New
+shards record explicit control/frame frequencies and action repetition; older
+shards may omit top-level `control_freq_hz` and are rejected rather than assigned
+an inferred clock. Existing datasets and frozen calibration are never rewritten
+by the checker. To evaluate a custom formula on such traces, use the direct
+`VisualSTLChecker` API with explicitly supplied timestamps, source-calibrated
+thresholds, and references, retaining the source/evaluation provenance; do not
+fit thresholds on stress-test labels.
+
 ## Run
 
 From the repository root, after setting up the existing environment:

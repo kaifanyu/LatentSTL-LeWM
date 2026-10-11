@@ -17,11 +17,11 @@ def arguments(tmp_path, **changes):
     return Namespace(**(values | changes))
 
 
-def source_file(path, complete=True):
+def source_file(path, complete=True, control_freq=20):
     with h5py.File(path, "w") as handle:
         handle.attrs["complete"] = complete
         handle.attrs["metadata_json"] = json.dumps({
-            "simulator_config": asdict(SimulatorConfig(render_gpu=2)),
+            "simulator_config": asdict(SimulatorConfig(render_gpu=2, control_freq=control_freq)),
         })
         handle.create_dataset("references/goal_rgb", data=np.zeros((128, 128, 3), np.uint8))
 
@@ -73,3 +73,42 @@ def test_incomplete_source_is_rejected_before_creating_output(tmp_path):
     with pytest.raises(ValueError, match="Source dataset is incomplete"):
         collector.run(args)
     assert not (tmp_path / "collection").exists()
+
+
+def test_shard_records_actual_control_clock_for_timed_monitoring(tmp_path, monkeypatch):
+    args = arguments(tmp_path)
+    source_file(args.source, control_freq=10)
+    closed = []
+
+    class StopBeforeTrajectories(Exception):
+        pass
+
+    class HeaderOnlyEnv:
+        action_low, action_high = -np.ones(7), np.ones(7)
+
+        def __init__(self, config, scenario):
+            self.config = config
+
+        def metadata(self):
+            return {"simulator_config": self.config,
+                    "control_freq_hz": self.config["control_freq"],
+                    "frame_freq_hz": self.config["control_freq"], "action_repeat": 1}
+
+        def reset(self, seed):
+            raise StopBeforeTrajectories
+
+        def close(self):
+            closed.append(True)
+
+    monkeypatch.setattr(collector, "ScenarioEnv", HeaderOnlyEnv)
+    with pytest.raises(StopBeforeTrajectories):
+        collector.run(args)
+    assert closed == [True]
+    assert not (tmp_path / "collection/trajectories.h5").exists()
+    with h5py.File(tmp_path / "collection/trajectories.partial.h5", "r") as handle:
+        assert not handle.attrs["complete"]
+        assert handle.attrs["control_freq_hz"] == 10
+        assert handle.attrs["frame_freq_hz"] == 10
+        assert handle.attrs["action_repeat"] == 1
+        nested = json.loads(handle.attrs["metadata_json"])
+        assert nested["control_freq_hz"] == handle.attrs["control_freq_hz"]

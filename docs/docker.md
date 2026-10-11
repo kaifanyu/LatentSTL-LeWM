@@ -23,6 +23,7 @@ bash scripts/docker.sh build
 bash scripts/docker.sh up
 bash scripts/docker.sh doctor
 bash scripts/docker.sh test
+bash scripts/docker.sh stl-test
 bash scripts/docker.sh replay 0
 bash scripts/docker.sh replay 1
 bash scripts/docker.sh shell
@@ -40,16 +41,76 @@ Changing source requires another `build`, then `up`; Docker caches the Python
 dependency layer. The build context excludes local data, checkpoints, caches,
 Git metadata, and `.env` files.
 
+The image build checks the learned visual backend imports and both timed-STL
+CLI entrypoints without requiring GPUs or datasets. `stl-test` runs the focused
+CPU tests for temporal semantics, analytical predicates, visual checking,
+validation-only calibration, action-conditioned forecasts, and the CEM adapter.
+The full `test` command includes these tests too. `doctor` and `replay` separately
+verify GPU execution and simulator rendering; passing CPU tests does not verify
+either one.
+
 This server uses Docker user namespace remapping. Compose sets `userns_mode:
 host` for this container and the helper passes your host UID/GID, so bind-mounted
 outputs remain owned by you. The container runs as your user, without privileged
 mode. The image allows Git to inspect its two known upstream repositories even
 when image ownership is remapped by the daemon. The entrypoint regenerates
 LIBERO's configuration in the mounted cache before starting the container command.
+The container uses `.cache/libero-docker/config.yaml`, while host setup uses
+`.cache/libero/config.yaml`. This keeps container `/workspace` paths from
+overwriting the host's simulator configuration. `scripts/env.sh` preserves an
+explicit `LIBERO_CONFIG_PATH`, including the value inherited by Compose `exec`.
 
 The shell may display `I have no name!` because the image has no account entry
 for your host's numeric UID. This is expected; `id` still shows the correct
 UID/GID and saved files remain owned by your host account.
+
+## Check recorded images and latent forecasts
+
+After `build` and `up`, run the same formula across pixels and learned features
+inside the container. The commands below use the retained local dataset and
+checkpoint; replace their paths with your own mounted artifacts if necessary.
+
+```bash
+bash scripts/docker.sh exec python -m latent_stl_lewm.check_stl \
+  --dataset /workspace/datasets/libero_mug_v1/trajectories.h5 \
+  --checkpoint /workspace/runs/cem_improved_20261005T064943Z/multistep_training/best.pt \
+  --methods pixels red_pixels global spatial \
+  --formula /workspace/examples/stl_reach_preserve_5s.json \
+  --device cuda:0 --batch-size 32 --max-episodes 3 \
+  --output /workspace/runs/docker_stl_observed
+```
+
+The output directory must be new. `--max-episodes` limits held-out test episodes;
+calibration still uses all validation episodes. The resulting calibration JSON,
+predicate traces, and report persist in the host's `runs/docker_stl_observed`.
+For a CPU/pixel-only run, omit `--checkpoint`, choose `--methods pixels red_pixels`,
+and use `--device cpu`. Physical diagnostics remain a separate comparison and
+never enter visual feature extraction.
+
+Use that frozen global calibration to audit a recorded-action forecast:
+
+```bash
+bash scripts/docker.sh exec python -m latent_stl_lewm.forecast_stl \
+  --dataset /workspace/datasets/libero_mug_v1/trajectories.h5 \
+  --checkpoint /workspace/runs/cem_improved_20261005T064943Z/multistep_training/best.pt \
+  --calibration-artifact /workspace/runs/docker_stl_observed/calibration.json \
+  --episode 000288 --start 16 --horizon 8 --deadline 5 \
+  --device cuda:0 --output /workspace/runs/docker_stl_forecast
+```
+
+Episode `000288` is a test episode in the example dataset; choose a held-out
+episode from your own dataset when using different artifacts. The audit retains
+the observed task prefix and the original deadline, then compares predicted
+global-latent, observed-latent, and physical predicate traces. Spatial features
+can be checked on observed images, but the current world model forecasts global
+features only.
+
+Time comes from recorded control indices and the dataset frequency. At 20 Hz,
+96 actions cover **4.8 seconds**, so a safe prefix cannot establish preservation
+through a five-second deadline. The checker reports unresolved requirements as
+`pending`; it never stretches the timestamps. Eight predicted actions cover
+0.4 seconds, not five seconds. See the [timed STL guide](stl_checking.md) for
+formula JSON, holding semantics, calibration reuse, and direct image/latent APIs.
 
 ## Complete two-GPU experiment
 

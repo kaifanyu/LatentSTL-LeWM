@@ -21,6 +21,13 @@ case "${1:-help}" in
   test)
     docker compose exec -T lewm python -m pytest -q
     ;;
+  stl-test)
+    docker compose exec -T lewm python -m pytest -q \
+      tests/test_timed_stl.py tests/test_timed_logic_entrypoint.py \
+      tests/test_predicate_library.py tests/test_visual_stl.py \
+      tests/test_check_stl.py tests/test_forecast_stl.py \
+      tests/test_logic_planner.py tests/test_world_model.py
+    ;;
   replay)
     docker compose exec -T -e RUN_SIMULATOR_TESTS=1 \
       -e "LEWM_RENDER_GPU=${2:-0}" lewm python -m pytest -q tests/test_data.py
@@ -46,6 +53,7 @@ Usage: bash scripts/docker.sh COMMAND
   shell       Open an interactive shell inside the container
   doctor      Check CUDA/FP16 on both GPUs and pinned upstream sources
   test        Run the existing test suite (simulator test is opt-in)
+  stl-test    Test timed predicates, image/latent checking, forecasts, and CEM integration
   replay [0|1]  Run the real EGL/MuJoCo replay test on the chosen GPU
   exec ...    Run a command in the container (without a terminal)
   logs        Show recent container startup logs

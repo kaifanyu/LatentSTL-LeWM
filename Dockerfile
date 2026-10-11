@@ -26,7 +26,7 @@ COPY --chmod=755 scripts/docker-entrypoint.sh /usr/local/bin/latentstl-entrypoin
 ENV PATH="/workspace/.venv/bin:${PATH}" \
     PYTHONPATH=/workspace:/workspace/third_party/LIBERO \
     LIBERO_ROOT=/workspace/third_party/LIBERO \
-    LIBERO_CONFIG_PATH=/workspace/.cache/libero \
+    LIBERO_CONFIG_PATH=/workspace/.cache/libero-docker \
     NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics \
     MUJOCO_GL=egl \
@@ -40,6 +40,12 @@ ENV PATH="/workspace/.venv/bin:${PATH}" \
     HF_HOME=/workspace/.cache/huggingface \
     PYTHONUNBUFFERED=1 \
     TOKENIZERS_PARALLELISM=false
+
+# These checks run without GPUs or research artifacts during the image build.
+# Import the learned visual backend as well as both executable STL entrypoints.
+RUN python -c "from transformers import ViTModel; from latent_stl_lewm.visual_stl import VisualSTLChecker; from latent_stl_lewm.forecast_stl import HistoryConditionedRollout, TimedLatentScorer" \
+    && python -m latent_stl_lewm.check_stl --help > /dev/null \
+    && python -m latent_stl_lewm.forecast_stl --help > /dev/null
 
 ENTRYPOINT ["latentstl-entrypoint"]
 CMD ["bash"]

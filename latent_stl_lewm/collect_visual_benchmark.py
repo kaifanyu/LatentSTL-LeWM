@@ -96,12 +96,14 @@ def run(args):
     began = time.monotonic()
     rows = []
     try:
+        metadata = env.metadata()
         with h5py.File(out / "trajectories.partial.h5", "x") as h:
             h.attrs["complete"] = False
             h.attrs["action_dim"] = 7
             h.attrs["action_low"], h.attrs["action_high"] = env.action_low, env.action_high
-            h.attrs["frame_freq_hz"] = 20
-            h.attrs["metadata_json"] = json.dumps({**env.metadata(), "purpose": "Held-out visual predicate benchmark",
+            for name in ("control_freq_hz", "frame_freq_hz", "action_repeat"):
+                h.attrs[name] = metadata[name]
+            h.attrs["metadata_json"] = json.dumps({**metadata, "purpose": "Held-out visual predicate benchmark",
                 "collector_uses_state": True, "predicates_use_state": False,
                 "goal_reference": "Original supplied goal image, unchanged under all stress conditions"})
             refs = h.create_group("references")
@@ -142,7 +144,7 @@ def run(args):
                     with (out / "progress.jsonl").open("a") as f:
                         f.write(json.dumps(row) + "\n")
                     if bank == 0:
-                        with imageio.get_writer(out / f"{policy}.mp4", fps=20, codec="libx264", quality=8) as writer:
+                        with imageio.get_writer(out / f"{policy}.mp4", fps=metadata["frame_freq_hz"], codec="libx264", quality=8) as writer:
                             for frame in trajectory["rgb"]:
                                 writer.append_data(frame)
                     h.flush()

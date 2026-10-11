@@ -21,6 +21,14 @@ among those recorded behaviors. This run does not establish autonomous CEM
 planning or closed-loop task success. Arbitrary STL formulas, an independent
 avoid-reference task, and Until are outside this experiment.
 
+The suite continues to run `visual_predicate_benchmark` and
+`visual_forecast_audit`, with the finite-episode/local-window formulas specified
+below. It does not run `check_stl` or `forecast_stl`, and its reports do not become
+five-second deadline checks merely because those newer modules are installed.
+Use the separate [timestamped checking workflow](stl_checking.md#docker-and-suite-interoperability)
+for an explicit seconds-based formula. [Docker setup](docker.md) is shared by
+both workflows; their calibration artifact formats and report semantics differ.
+
 ## Data, training, and independence
 
 The source collection has 512 training, 64 validation, and 64 test episodes,
