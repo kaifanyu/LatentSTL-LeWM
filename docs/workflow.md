@@ -3,6 +3,10 @@
 Run commands from the repository root after `source scripts/env.sh`. Use new
 output directories; scientific artifacts are never silently overwritten.
 
+For the current two-RTX-3090 Docker environment, start with the
+[Docker setup](docker.md) and [two-GPU STL suite](stl_suite.md). The three-GPU
+launchers below reproduce the original workflow and require three visible GPUs.
+
 ## 1. Collect the training dataset
 
 ```bash

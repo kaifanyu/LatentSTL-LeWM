@@ -1,4 +1,4 @@
-"""Data boundary tests; optional real simulator replay test uses GPU2."""
+"""Data boundary tests; optional simulator replay uses LEWM_RENDER_GPU (default 0)."""
 import os
 
 import h5py
@@ -62,8 +62,8 @@ def test_incomplete_collection_rejected(dataset_file):
 
 @pytest.mark.skipif(os.environ.get("RUN_SIMULATOR_TESTS") != "1", reason="opt-in real EGL/MuJoCo integration")
 def test_real_simulator_exact_replay():
-    from latent_stl_lewm.simulator import MugPreservationEnv
-    env = MugPreservationEnv()
+    from latent_stl_lewm.simulator import MugPreservationEnv, SimulatorConfig
+    env = MugPreservationEnv(SimulatorConfig(render_gpu=int(os.environ.get("LEWM_RENDER_GPU", "0"))))
     try:
         env.reset(0)
         snapshot = env.snapshot()

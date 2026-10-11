@@ -1,0 +1,38 @@
+services:
+  lewm:
+    build: .
+    image: latentstl-lewm:cu118
+    container_name: latentstl-lewm
+    user: "${LEWM_UID:?Use bash scripts/docker.sh}:${LEWM_GID:?Use bash scripts/docker.sh}"
+    # Match host ownership for bind mounts on this server's remapped Docker daemon.
+    userns_mode: host
+    runtime: nvidia
+    init: true
+    shm_size: 8gb
+    working_dir: /workspace
+    environment:
+      PYTEST_ADDOPTS: "-o cache_dir=/workspace/.cache/pytest"
+    command: ["sleep", "infinity"]
+    volumes:
+      - type: bind
+        source: ./datasets
+        target: /workspace/datasets
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./runs
+        target: /workspace/runs
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.cache
+        target: /workspace/.cache
+        bind:
+          create_host_path: false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0", "1"]
+              capabilities: [gpu]

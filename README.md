@@ -11,6 +11,8 @@ dynamics can predict it, and whether it can guide action selection.
 
 ## Start here
 
+- [Docker setup](docs/docker.md): reproducible environment for two NVIDIA GPUs.
+- [Two-GPU STL suite](docs/stl_suite.md): training, fresh trials, and live reports.
 - [Workflow and commands](docs/workflow.md): collect → train → evaluate → plan.
 - [Timestamped STL checking](docs/stl_checking.md): nested formulas over images,
   LeWM latents, and action-conditioned forecasts, with calibration and deadline handling.
@@ -20,53 +22,69 @@ dynamics can predict it, and whether it can guide action selection.
 
 ## Setup
 
-Tested on Linux with Python 3.11 and 3 × RTX 2080 Ti (11 GB). Training and
-inference use **FP16**, 128 × 128 single-camera images, and independent GPU jobs.
-There is no DDP. An NVIDIA driver with CUDA/EGL support, Git, and
-[uv](https://docs.astral.sh/uv/getting-started/installation/) are required.
+For the two-RTX-3090 server, use the [Docker setup](docs/docker.md). It builds
+the pinned environment, exposes both GPUs, and keeps datasets and results on
+the host.
+
+For the full two-GPU experiment, see the [STL suite protocol](docs/stl_suite.md):
+two model seeds, four predicate representations, 1,728 paired fresh trajectories,
+96/192-action trials, forecast audits, and live reports with videos and traces.
+
+The Docker environment is validated on Linux with **2 × RTX 3090 (24 GB)**,
+Python 3.11, and PyTorch 2.7.1/CUDA 11.8. Training uses FP16, 128 × 128
+single-camera images, and independent GPU jobs; there is no DDP. The host needs
+Docker Engine, Docker Compose v2 or newer, the NVIDIA driver, and NVIDIA
+Container Toolkit configured for Docker.
 
 ```bash
 git clone https://github.com/kaifanyu/LatentSTL-LeWM.git
 cd LatentSTL-LeWM
-bash scripts/setup.sh
-source scripts/env.sh
-python scripts/doctor.py
-python -m pytest -q
+bash scripts/docker.sh build
+bash scripts/docker.sh up
+bash scripts/docker.sh doctor
+bash scripts/docker.sh test
+bash scripts/docker.sh replay 0
+bash scripts/docker.sh replay 1
+bash scripts/docker.sh shell
 ```
 
-Setup installs pinned Python dependencies and clones the pinned LeWM and LIBERO
-sources into `third_party/`. It preserves an existing Python 3.11 environment.
-For the real simulator replay test:
+Inside the container the code is at `/workspace`, and the Python environment is
+already configured. `datasets`, `runs`, and `.cache` persist on the host.
+The image includes pinned LeWM and LIBERO revisions. No host CUDA compiler or
+host Python environment is required for this Docker workflow.
+
+For a native installation, the original Python 3.11 / three-RTX-2080-Ti workflow
+is retained in [the workflow guide](docs/workflow.md). It uses
+[uv](https://docs.astral.sh/uv/getting-started/installation/):
 
 ```bash
-RUN_SIMULATOR_TESTS=1 python -m pytest -q tests/test_data.py
+bash scripts/setup.sh
+source scripts/env.sh
+python scripts/doctor.py --expected-gpus 2
+RUN_SIMULATOR_TESTS=1 LEWM_RENDER_GPU=0 python -m pytest -q
 ```
 
 ## Main workflow
 
 ```bash
-# 1. Collect images/actions with disjoint train/validation/test starts.
-python -m latent_stl_lewm.collect --output datasets/libero_mug_v1 \
-  --train-episodes 256 --val-episodes 32 --test-episodes 32 \
-  --steps 96 --seed 20261004 --render-gpu 0
+# Run from a host terminal after Docker setup. Use a new run name.
+bash scripts/docker.sh exec python scripts/run_stl_suite.py --prepare \
+  --output /workspace/runs/stl_suite_v1
 
-# 2. Train three independent seeds on GPUs 0, 1, and 2.
-python scripts/launch_3gpu.py --dataset datasets/libero_mug_v1/trajectories.h5 \
-  --output runs/training --max-steps 20000 --epochs 100
-python scripts/status.py runs/training
-
-# 3. Once training finishes, launch the visual-predicate benchmark.
-python scripts/launch_visual_campaign.py \
-  --dataset datasets/libero_mug_v1/trajectories.h5 \
-  --checkpoint runs/training/seed_2/train/best.pt \
-  --output runs/visual_benchmark
+docker exec -d latentstl-lewm bash -c \
+  'exec python /workspace/runs/stl_suite_v1/source_snapshot/scripts/run_stl_suite.py --output /workspace/runs/stl_suite_v1 > /workspace/runs/stl_suite_v1/supervisor.log 2>&1'
 ```
 
-Always choose a **new output directory**. The benchmark continues in the
-background; inspect `runs/visual_benchmark/status.json` and open its `index.html`
-for metrics and replays. The default queue collects 864 trajectories across
-eight conditions, evaluates four representations, then audits global-latent
-forecasts. For one GPU, use the individual commands in the workflow guide.
+The two-GPU supervisor runs a finite queue in the background: collect 512/64/64
+source episodes, train two seeds, freeze validation-calibrated thresholds, then
+evaluate four representations on 1,728 shared fresh trajectories across eight
+conditions and two durations. Inspect `runs/stl_suite_v1/status.json` and open
+its `index.html` for progress, videos, and predicate traces. Exact trial methods,
+SSH viewing, and graceful stopping are in the [suite guide](docs/stl_suite.md).
+Add `--smoke` to the preparation command for a small infrastructure check.
+
+Always choose a **new output directory**. The original three-GPU launchers and
+individual one-GPU commands remain in [the workflow guide](docs/workflow.md).
 
 The last completed benchmark used a predictor fine-tuned for eight-step
 rollouts. Its reproduction command is in [the workflow](docs/workflow.md).
