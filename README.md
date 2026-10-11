@@ -12,6 +12,8 @@ dynamics can predict it, and whether it can guide action selection.
 ## Start here
 
 - [Workflow and commands](docs/workflow.md): collect → train → evaluate → plan.
+- [Timestamped STL checking](docs/stl_checking.md): nested formulas over images,
+  LeWM latents, and action-conditioned forecasts, with calibration and deadline handling.
 - [Results and limitations](docs/results.md): what the experiments establish.
 - [Data format](docs/data.md) and [LeWM architecture](docs/lewm_adapter_notes.md).
 - [Local artifacts](docs/artifacts.md): checkpoints, datasets, and retained runs.

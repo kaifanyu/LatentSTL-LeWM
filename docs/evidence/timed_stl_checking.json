@@ -1,0 +1,340 @@
+{
+  "date": "2026-10-10",
+  "inference_device": "cpu",
+  "validation_episodes": 32,
+  "test_episodes": 32,
+  "cases": {
+    "five_second_reach_preserve": {
+      "formula": {
+        "op": "and",
+        "args": [
+          {
+            "op": "always",
+            "interval": [
+              0,
+              5.0
+            ],
+            "arg": {
+              "op": "predicate",
+              "name": "preserve"
+            }
+          },
+          {
+            "op": "eventually",
+            "interval": [
+              0,
+              5.0
+            ],
+            "arg": {
+              "op": "predicate",
+              "name": "reach"
+            }
+          }
+        ]
+      },
+      "formula_horizon_seconds": 5.0,
+      "dataset_sha256": "a59e65b2f130e23acb06da40ab19fcf7a1c54cf15896f67f627c95a8c39ccc35",
+      "checkpoint_sha256": "018a4d94dd69c80bb235b5e94b6a115a8595cbb4621d6ef6c91c174430f78ec9",
+      "calibration_sha256": "61b2f319353ffa081f73d5b95c93ffcf534e82497dda73fc903c1bcdc246fdd3",
+      "evaluation_episode_ids": [
+        "000288",
+        "000289",
+        "000290",
+        "000291",
+        "000292",
+        "000293",
+        "000294",
+        "000295",
+        "000296",
+        "000297",
+        "000298",
+        "000299",
+        "000300",
+        "000301",
+        "000302",
+        "000303",
+        "000304",
+        "000305",
+        "000306",
+        "000307",
+        "000308",
+        "000309",
+        "000310",
+        "000311",
+        "000312",
+        "000313",
+        "000314",
+        "000315",
+        "000316",
+        "000317",
+        "000318",
+        "000319"
+      ],
+      "scope": "Observed recorded trajectories; sampled-time monitoring; no forecast or closed-loop claims",
+      "methods": {
+        "pixels": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 0,
+            "violated": 12,
+            "pending": 20,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 0,
+            "violated": 9,
+            "pending": 23,
+            "boundary": 0
+          },
+          "decided_comparisons": 9,
+          "decided_agreement": 1.0,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "red_pixels": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 0,
+            "violated": 12,
+            "pending": 20,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 0,
+            "violated": 9,
+            "pending": 23,
+            "boundary": 0
+          },
+          "decided_comparisons": 9,
+          "decided_agreement": 1.0,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "global": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 0,
+            "violated": 27,
+            "pending": 5,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 0,
+            "violated": 9,
+            "pending": 23,
+            "boundary": 0
+          },
+          "decided_comparisons": 9,
+          "decided_agreement": 1.0,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "spatial": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 0,
+            "violated": 13,
+            "pending": 19,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 0,
+            "violated": 9,
+            "pending": 23,
+            "boundary": 0
+          },
+          "decided_comparisons": 9,
+          "decided_agreement": 1.0,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        }
+      },
+      "local_report": "runs/timed_stl_20261010_five_seconds/report.json"
+    },
+    "reach_and_hold_4_8_seconds": {
+      "formula": {
+        "op": "and",
+        "args": [
+          {
+            "op": "always",
+            "interval": [
+              0,
+              4.8
+            ],
+            "arg": {
+              "op": "predicate",
+              "name": "preserve"
+            }
+          },
+          {
+            "op": "eventually",
+            "interval": [
+              0,
+              4.3
+            ],
+            "arg": {
+              "op": "always",
+              "interval": [
+                0,
+                0.5
+              ],
+              "arg": {
+                "op": "predicate",
+                "name": "reach"
+              }
+            }
+          }
+        ]
+      },
+      "formula_horizon_seconds": 4.8,
+      "dataset_sha256": "a59e65b2f130e23acb06da40ab19fcf7a1c54cf15896f67f627c95a8c39ccc35",
+      "checkpoint_sha256": "018a4d94dd69c80bb235b5e94b6a115a8595cbb4621d6ef6c91c174430f78ec9",
+      "calibration_sha256": "61b2f319353ffa081f73d5b95c93ffcf534e82497dda73fc903c1bcdc246fdd3",
+      "evaluation_episode_ids": [
+        "000288",
+        "000289",
+        "000290",
+        "000291",
+        "000292",
+        "000293",
+        "000294",
+        "000295",
+        "000296",
+        "000297",
+        "000298",
+        "000299",
+        "000300",
+        "000301",
+        "000302",
+        "000303",
+        "000304",
+        "000305",
+        "000306",
+        "000307",
+        "000308",
+        "000309",
+        "000310",
+        "000311",
+        "000312",
+        "000313",
+        "000314",
+        "000315",
+        "000316",
+        "000317",
+        "000318",
+        "000319"
+      ],
+      "scope": "Observed recorded trajectories; sampled-time monitoring; no forecast or closed-loop claims",
+      "methods": {
+        "pixels": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 6,
+            "violated": 26,
+            "pending": 0,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 9,
+            "violated": 23,
+            "pending": 0,
+            "boundary": 0
+          },
+          "decided_comparisons": 32,
+          "decided_agreement": 0.90625,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "red_pixels": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 6,
+            "violated": 26,
+            "pending": 0,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 9,
+            "violated": 23,
+            "pending": 0,
+            "boundary": 0
+          },
+          "decided_comparisons": 32,
+          "decided_agreement": 0.90625,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "global": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 1,
+            "violated": 31,
+            "pending": 0,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 9,
+            "violated": 23,
+            "pending": 0,
+            "boundary": 0
+          },
+          "decided_comparisons": 32,
+          "decided_agreement": 0.6875,
+          "false_satisfied_count": 1,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        },
+        "spatial": {
+          "episodes": 32,
+          "visual_status_counts": {
+            "satisfied": 6,
+            "violated": 26,
+            "pending": 0,
+            "boundary": 0
+          },
+          "physical_status_counts": {
+            "satisfied": 9,
+            "violated": 23,
+            "pending": 0,
+            "boundary": 0
+          },
+          "decided_comparisons": 32,
+          "decided_agreement": 0.90625,
+          "false_satisfied_count": 0,
+          "note": "Pending and zero-boundary cases excluded from decided comparisons; no quantitative visual/physical score comparison"
+        }
+      },
+      "local_report": "runs/timed_stl_20261010_reach_hold/report.json"
+    },
+    "recorded_action_forecast": {
+      "scope": "Recorded-action forecast audit; predicted success is not physical certification",
+      "episode": "000290",
+      "task_start_seconds": 0.0,
+      "forecast_start_seconds": 0.8,
+      "forecast_horizon_steps": 8,
+      "forecast_horizon_seconds": 0.4,
+      "predicted": {
+        "status": "violated",
+        "complete": false,
+        "lower": "-inf",
+        "upper": -0.575903594493866,
+        "robustness": null
+      },
+      "observed": {
+        "status": "violated",
+        "complete": false,
+        "lower": "-inf",
+        "upper": -0.575903594493866,
+        "robustness": null
+      },
+      "physical": {
+        "status": "pending",
+        "complete": false,
+        "lower": "-inf",
+        "upper": 0.9999999999999974,
+        "robustness": null
+      },
+      "local_report": "runs/timed_stl_20261010_forecast/report.json"
+    }
+  },
+  "interpretation": "Integration checks and observed-trajectory classification only. Calibration is not a physical guarantee; global latent grounding remains unreliable. Five-second prefixes are incomplete."
+}

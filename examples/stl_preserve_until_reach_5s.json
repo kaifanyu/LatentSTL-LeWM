@@ -1,0 +1,6 @@
+{
+  "op": "until",
+  "interval": [0, 5],
+  "left": {"op": "predicate", "name": "preserve"},
+  "right": {"op": "predicate", "name": "reach"}
+}

@@ -18,11 +18,14 @@ class CEMConfig:
 
 
 @torch.no_grad()
-def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl", config=None, predicate_config=None, history_latents=None, initial_mean=None):
+def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl", config=None, predicate_config=None, history_latents=None, initial_mean=None,
+             trajectory_scorer=None):
     config = config or CEMConfig()
     predicate_config = predicate_config or PredicateConfig()
     if objective not in ("terminal", "eventual", "stl"):
         raise ValueError("objective must be terminal, eventual, or stl")
+    if trajectory_scorer is not None and (objective != "stl" or history_latents is not None):
+        raise ValueError("Custom trajectory_scorer requires objective='stl' and owns its observed history")
     if z0.shape[0] != 1:
         raise ValueError("CEM plans from exactly one initial observation")
     if not 1 <= config.elites <= config.population or min(config.horizon, config.iterations, config.chunk_size) < 1:
@@ -38,6 +41,9 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
             return latent
         prefix = history_latents.expand(latent.shape[0], *history_latents.shape[1:])
         return torch.cat([prefix, latent], dim=1)
+    def score(latent):
+        return (trajectory_scorer(latent) if trajectory_scorer is not None else
+                score_trajectories(with_history(latent), goal, safe, predicate_config))
     device = z0.device
     low = torch.as_tensor(action_low, device=device, dtype=torch.float32)
     high = torch.as_tensor(action_high, device=device, dtype=torch.float32)
@@ -64,7 +70,7 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
         for chunk in actions.split(config.chunk_size):
             initial = z0.expand(chunk.shape[0], *z0.shape[1:])
             latent = model.rollout(initial, chunk)
-            values.append(score_trajectories(with_history(latent), goal, safe, predicate_config)[objective])
+            values.append(score(latent)[objective])
         scores = torch.cat(values)
         if scores.shape != (config.population,) or not torch.isfinite(scores).all():
             raise RuntimeError("Planner received invalid/nonfinite latent scores")
@@ -81,8 +87,10 @@ def plan_cem(model, z0, goal, safe, action_low, action_high, *, objective="stl",
                          "unique_scores": int(torch.unique(scores).numel()),
                          "candidate_actions": actions.cpu().tolist(), "candidate_scores": scores.cpu().tolist()})
     latent = model.rollout(z0, best_actions[None])
-    scores = score_trajectories(with_history(latent), goal, safe, predicate_config)
+    scores = score(latent)
     return {"actions": best_actions, "score": best_score,
             "scores": {key: val.detach().cpu().tolist() for key, val in scores.items()},
             "iterations": progress, "config": asdict(config), "objective": objective,
-            "predicate_config": predicate_config.to_dict(), "candidate_evaluations": config.population * config.iterations}
+            "predicate_config": predicate_config.to_dict() if trajectory_scorer is None else None,
+            "scoring": "legacy_visual" if trajectory_scorer is None else "explicit_trajectory_scorer",
+            "candidate_evaluations": config.population * config.iterations}

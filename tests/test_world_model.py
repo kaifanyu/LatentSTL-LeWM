@@ -72,6 +72,17 @@ def test_uint8_and_float_inputs_are_equivalent(model):
     torch.testing.assert_close(model.encode(pixels), model.encode(pixels.float() / 255))
 
 
+def test_spatial_encoding_preserves_patch_and_time_axes_without_claiming_dynamics(model):
+    model.eval()
+    pixels = torch.randint(0, 256, (2, 3, 3, 32, 32), dtype=torch.uint8)
+    tokens = model.encode_spatial(pixels)
+    assert tokens.shape == (2, 3, 4, 24)
+    torch.testing.assert_close(tokens[:, 1], model.encode_spatial(pixels[:, 1]))
+    torch.testing.assert_close(tokens, model.encode_spatial(pixels.float() / 255))
+    assert model.latent_layout == "global"
+    assert model.rollout(model.encode(pixels[:, 0]), torch.zeros(2, 1, 7)).ndim == 3
+
+
 def test_frozen_encoder_and_projector_preserve_batchnorm_state(model):
     config = asdict(model.config) | {"backend": "frozen_encoder_learned_predictor"}
     frozen = LeWMWorldModel(config)

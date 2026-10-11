@@ -173,6 +173,20 @@ class LeWMWorldModel(LatentWorldModel):
         emb = self.model.encode({"pixels": pixels})["emb"]
         return emb[:, 0] if singleton_time else emb
 
+    def encode_spatial(self, obs):
+        """Observed patch features B,N,D or B,T,N,D, excluding the CLS token.
+
+        These features support object-region predicate checking. The existing
+        autoregressive predictor still forecasts global projected CLS vectors;
+        this method does not introduce a spatial dynamics model.
+        """
+        singleton_time = obs.ndim == 4
+        pixels = self._preprocess(obs)
+        batch, time = pixels.shape[:2]
+        tokens = self.model.encoder(pixels.flatten(0, 1)).last_hidden_state[:, 1:]
+        tokens = tokens.reshape(batch, time, *tokens.shape[1:])
+        return tokens[:, 0] if singleton_time else tokens
+
     def _encode_actions(self, actions):
         if actions.shape[-1] != self.config.action_dim:
             raise ValueError(f"Expected action dimension {self.config.action_dim}")

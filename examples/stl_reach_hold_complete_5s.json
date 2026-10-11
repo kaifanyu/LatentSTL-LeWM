@@ -1,0 +1,11 @@
+{
+  "op": "and",
+  "args": [
+    {"op": "always", "interval": [0, 5], "arg": {"op": "predicate", "name": "preserve"}},
+    {
+      "op": "eventually",
+      "interval": [0, 4],
+      "arg": {"op": "always", "interval": [0, 1], "arg": {"op": "predicate", "name": "reach"}}
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Exact and explicitly smooth finite-trace STL over visual latents only.
+"""Legacy index-based scoring and entrypoint for timestamped STL checking.
 
 Temporal windows are inclusive integer observation indices [start, end].  A
 rollout with H actions has H+1 observations, so [0,H] includes the start.
@@ -127,13 +127,26 @@ def disjunction(*values, semantics="exact", tau=0.01):
     return _reduce(torch.stack(torch.broadcast_tensors(*values), -1), False, semantics, tau)
 
 
-def evaluate_formula(formula: Mapping, predicates: Mapping[str, torch.Tensor], *, semantics="exact", tau=0.01):
+def evaluate_formula(formula: Mapping, predicates: Mapping[str, torch.Tensor], *, semantics="exact", tau=0.01,
+                     timestamps=None, evaluation_time=None):
     """Evaluate a small declarative AST; never evaluates code or language.
 
-    Temporal operators take predicate traces and reduce their final time axis.
-    This initial fragment permits Boolean composition of finite-window
-    temporal clauses, not nested temporal operators with relative-time shifts.
+    Supplying ``timestamps`` selects the full bounded future-time engine and
+    returns a ``timed_stl.MonitorResult`` with bounds/status. Temporal nodes then
+    require ``interval: [a, b]`` in seconds, support arbitrary nesting/Until,
+    and retain unknown future rather than silently clipping the deadline.
+
+    Without timestamps the historical index-based API returns a tensor and
+    supports Boolean compositions of one-level temporal clauses. Its legacy
+    smooth behavior is preserved; timestamped acceptance is always exact.
     """
+    if timestamps is not None:
+        if semantics != "exact":
+            raise ValueError("Timestamped acceptance requires exact semantics")
+        from .timed_stl import evaluate_timed_formula
+        return evaluate_timed_formula(formula, predicates, timestamps, evaluation_time=evaluation_time)
+    if evaluation_time is not None:
+        raise ValueError("evaluation_time requires timestamps")
     def visit(node):
         op = node["op"]
         if op == "predicate":
